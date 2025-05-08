@@ -1,5 +1,7 @@
 package server;
 import observer.Observer;
+import server.data_base.DataBase;
+import server.handler.Handler;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -10,12 +12,16 @@ import java.util.ArrayList;
 public class Server implements Observer {
     ServerSocket serverSocket;
     int serverPort;
+    Handler handler;
     ArrayList<ServerThread> serverThreads;
+    DataBase dataBase;
 
     public Server(int serverPort) throws IOException {
         this.serverPort = serverPort;
         serverThreads = new ArrayList<>();
         serverSocket = new ServerSocket(serverPort);
+        dataBase = new DataBase();
+        handler = new Handler(dataBase, serverThreads);
     }
     public void runServer() {
         try {
@@ -39,11 +45,6 @@ public class Server implements Observer {
 
     @Override
     public void update(String data, Object object) throws IOException {
-
-        for (int i = 0; i != serverThreads.size(); ++i) {
-            if (!((ServerThread)object).equals(serverThreads.get(i))) {
-                serverThreads.get(i).sendMessage(data);
-            }
-        }
+        handler.runHandler(data, (ServerThread)(object));
     }
 }
