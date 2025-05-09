@@ -1,7 +1,5 @@
 package chat_client;
 
-import UI.view.AuthoriszationScreen;
-import UI.view.View;
 import chat_client.client_features.ClientReader;
 import chat_client.client_features.ClientWriter;
 import chat_client.client_handler.ClientHandler;
@@ -27,12 +25,19 @@ public class Client {
         clientReader = new ClientReader(socket, clientHandler);
         clientWriter = new ClientWriter(socket, user);
     }
-    public void run() throws IOException {
+    public void runClient() throws IOException {
         clientWriter.start();
         clientReader.start();
     }
+    public void registrationPerfromed() {
+        clientWriter.loginPerfomed();
+    }
+    public void setUserName(String name) {
+        user.setUserName(name);
+    }
     public static void main(String[] args) throws IOException {
         Client client = new Client();
-        client.run();
+        client.runClient();
     }
+
 }

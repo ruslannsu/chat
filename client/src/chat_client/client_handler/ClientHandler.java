@@ -19,12 +19,20 @@ public class ClientHandler {
         user.setToken(token);
         System.out.println(user.getToken());
     }
+    void eventAccessHandler(String data) {
+        System.out.println(xmlProcessor.getTagContentModified(data, "name"));
+    }
     public void runHandler(String data) throws ParserConfigurationException, IOException, SAXException {
         String mainTag = xmlProcessor.getMainTag(data);
         switch (mainTag) {
             case "access":
                 loginAccessHandler(data);
                 break;
+            case "userlogin":
+                eventAccessHandler(data);
+                break;
+
+
         }
     }
 }

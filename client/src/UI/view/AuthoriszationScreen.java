@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 
+import UI.controller.listeners.ActionController;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -25,8 +26,8 @@ public class AuthoriszationScreen extends JFrame {
         UIManager.put("Table.selectionForeground", Color.BLACK);
         FlatLaf.updateUI();
         initUI();
+        setVisible(true);
     }
-
     private void initUI() {
         setTitle("Chat Registration");
         setSize(400, 200);
@@ -43,6 +44,7 @@ public class AuthoriszationScreen extends JFrame {
         usernameField.setAlignmentX(Component.CENTER_ALIGNMENT);
         joinButton = new JButton("Join");
         joinButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        joinButton.setActionCommand("registration");
         panel.add(label);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(usernameField);
@@ -50,10 +52,8 @@ public class AuthoriszationScreen extends JFrame {
         panel.add(joinButton);
         add(panel);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new AuthoriszationScreen().setVisible(true);
-        });
+    public void initController(ActionController controller) {
+        controller.setAscociatedField(usernameField);
+        joinButton.addActionListener(controller);
     }
 }

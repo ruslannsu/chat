@@ -8,11 +8,15 @@ public class User {
     }
     public void setToken(String token) {
         this.token = token;
+        System.out.println(token);
     }
     public String getToken() {
         return token;
     }
-
+    public void setUserName(String name) {
+        this.userName = name;
+        System.out.println(name);
+    }
     public String getUserName() {
         return userName;
     }

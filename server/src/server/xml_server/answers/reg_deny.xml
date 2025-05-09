@@ -1,0 +1,4 @@
+<deny>
+    <session>$TOKEN$</session>
+    <message>WOW</message>
+</deny>

@@ -14,6 +14,7 @@ public class ClientWriter extends Thread {
     BufferedWriter writer;
     XMLprocessor xmlProcessor;
     User user;
+    String mainCommand = "";
     public ClientWriter(Socket socket, User user) throws IOException {
         super();
         this.socket = socket;
@@ -27,19 +28,23 @@ public class ClientWriter extends Thread {
         super.run();
         while (isAlive()) {
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                String data = reader.readLine();
-                if (data.equals("/reg")) {
+                if (mainCommand.isEmpty()) {
+                    continue;
+                }
+                if (mainCommand.equals("/reg")) {
                     String xmlFile = new String(Files.readAllBytes(Paths.get("client/src/chat_client/xml_client_messages/login.xml")), StandardCharsets.UTF_8);
                     xmlFile = xmlFile.replaceAll("[\n\r]", "");
-                    xmlFile = xmlFile.replaceAll("\s+", "").trim();
+                    xmlFile = xmlFile.replaceFirst("\\s", "<<<SPACE>>>");
+                    xmlFile = xmlFile.replaceAll("\\s", "");
+                    xmlFile = xmlFile.replace("<<<SPACE>>>", " ");
                     xmlFile = xmlFile + '\n';
                     xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "USER_NAME", user.getUserName());
                     writer.write(xmlFile);
                     writer.flush();
+                    waitCommand();
                 }
                 else {
-                    writer.write(data + '\n');
+                    writer.write(mainCommand + '\n');
                     writer.flush();
                 }
 
@@ -48,5 +53,11 @@ public class ClientWriter extends Thread {
                 throw new RuntimeException(e);
             }
         }
+    }
+    public void loginPerfomed() {
+        mainCommand = "/reg";
+    }
+    public void waitCommand() {
+        mainCommand = "";
     }
 }
