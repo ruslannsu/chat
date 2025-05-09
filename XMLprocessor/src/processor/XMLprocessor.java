@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 
 public class XMLprocessor {
@@ -36,6 +37,21 @@ public class XMLprocessor {
     public String replacePlaceholder(String xmlFile, String placeholder, String content) {
         xmlFile = xmlFile.replace(placeholder, content);
         return xmlFile;
+    }
+    public String getMainTag(String xml) {
+        if (xml.charAt(0) != '<') {
+            return null;
+        }
+        StringBuilder xmlBuilder = new StringBuilder();
+        for (int i = 1; i != xml.length(); ++i) {
+            if (xml.charAt(i) == '>') {
+                return xmlBuilder.toString();
+            }
+            else {
+                xmlBuilder.append(xml.charAt(i));
+            }
+        }
+        return null;
     }
 
 }

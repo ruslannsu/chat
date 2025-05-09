@@ -1,5 +1,9 @@
 package chat_client.client_features;
 
+import chat_client.client_handler.ClientHandler;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,9 +13,11 @@ import java.nio.Buffer;
 public class ClientReader extends Thread {
     Socket socket;
     BufferedReader bufferedReader;
-    public ClientReader(Socket socket) throws IOException {
+    ClientHandler clientHandler;
+    public ClientReader(Socket socket, ClientHandler clientHandler) throws IOException {
         this.socket = socket;
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.clientHandler = clientHandler;
     }
 
     @Override
@@ -21,11 +27,12 @@ public class ClientReader extends Thread {
             try {
                 String data;
                 data = bufferedReader.readLine();
-                System.out.println(data);
+                clientHandler.runHandler(data);
             }
-            catch (IOException e) {
+            catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
         }
     }
 }

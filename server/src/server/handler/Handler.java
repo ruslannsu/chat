@@ -48,8 +48,19 @@ public class Handler {
         }
 
     }
-    public void runHandler(String data, ServerThread serverThread) throws IOException {
-        XMLprocessor xmlProcessor = new XMLprocessor();
-        loginHandler(data, serverThread);
+    public void runHandler(String data, ServerThread serverThread)  {
+        String mainTag = xmlProcessor.getMainTag(data);
+        try {
+            switch (mainTag) {
+                case "login":
+                    String name = xmlProcessor.getTagContent(data, "name");
+                    System.out.println(name);
+                    loginHandler(name, serverThread);
+                    break;
+            }
+        }
+        catch (Exception ex) {
+            throw new RuntimeException();
+        }
     }
 }

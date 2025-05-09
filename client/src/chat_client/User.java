@@ -9,4 +9,11 @@ public class User {
     public void setToken(String token) {
         this.token = token;
     }
+    public String getToken() {
+        return token;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 }

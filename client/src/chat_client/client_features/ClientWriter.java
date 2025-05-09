@@ -7,13 +7,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLOutput;
 
+import chat_client.User;
+import processor.XMLprocessor;
 public class ClientWriter extends Thread {
     Socket socket;
     BufferedWriter writer;
-    public ClientWriter(Socket socket) throws IOException {
+    XMLprocessor xmlProcessor;
+    User user;
+    public ClientWriter(Socket socket, User user) throws IOException {
         super();
         this.socket = socket;
         writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        xmlProcessor = new XMLprocessor();
+        this.user = user;
     }
 
     @Override
@@ -28,6 +34,7 @@ public class ClientWriter extends Thread {
                     xmlFile = xmlFile.replaceAll("[\n\r]", "");
                     xmlFile = xmlFile.replaceAll("\s+", "").trim();
                     xmlFile = xmlFile + '\n';
+                    xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "USER_NAME", user.getUserName());
                     writer.write(xmlFile);
                     writer.flush();
                 }

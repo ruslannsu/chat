@@ -17,7 +17,7 @@ public class ServerThread extends Thread implements Observable {
     }
     public void sendMessage(String data) throws IOException {
         System.out.println("here");
-        writer.write(data + '\n');
+        writer.write(data);
         writer.flush();
     }
     @Override
