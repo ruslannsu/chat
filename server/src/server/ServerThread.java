@@ -26,7 +26,6 @@ public class ServerThread extends Thread implements Observable {
         while (isAlive()) {
             try {
                 data = reader.readLine();
-                System.out.println("SERVER MESSAGE:");
                 System.out.println(data);
                 notifyObserver(data, this);
             }

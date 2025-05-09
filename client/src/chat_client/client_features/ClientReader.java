@@ -19,7 +19,8 @@ public class ClientReader extends Thread {
         super.run();
         while (isAlive()) {
             try {
-                String data = bufferedReader.readLine();
+                String data;
+                data = bufferedReader.readLine();
                 System.out.println(data);
             }
             catch (IOException e) {

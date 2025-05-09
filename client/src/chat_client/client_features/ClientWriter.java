@@ -22,14 +22,17 @@ public class ClientWriter extends Thread {
         while (isAlive()) {
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                String input = reader.readLine();
-                if (input.equals("/reg")) {
+                String data = reader.readLine();
+                if (data.equals("/reg")) {
                     String xmlFile = new String(Files.readAllBytes(Paths.get("client/src/chat_client/xml_client_messages/login.xml")), StandardCharsets.UTF_8);
+                    xmlFile = xmlFile.replaceAll("[\n\r]", "");
+                    xmlFile = xmlFile.replaceAll("\s+", "").trim();
+                    xmlFile = xmlFile + '\n';
                     writer.write(xmlFile);
                     writer.flush();
                 }
                 else {
-                    writer.write(input + '\n');
+                    writer.write(data + '\n');
                     writer.flush();
                 }
 
