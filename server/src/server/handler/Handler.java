@@ -76,14 +76,18 @@ public class Handler {
         xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "MESSAGE", messageInner);
         xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "USER_NAME", name);
         for (ServerThread serverThread : serverThreads) {
-            if (!serverThread.equals(source)) {
-                serverThread.sendMessage(xmlFile);
-            }
-            System.out.println("da");
+            serverThread.sendMessage(xmlFile);
         }
-
-
-
+    }
+    void logoutHandler(String data, ServerThread source) throws IOException {
+        String token = xmlProcessor.getTagContentModified(data, "session");
+        String xmlFile = new String(Files.readAllBytes(Paths.get("server/src/server/xml_server/answers/common_access.xml")), StandardCharsets.UTF_8);
+        xmlFile = xmlProcessor.fixXML(xmlFile);
+        source.sendMessage(xmlFile);
+        if (source.getReader().read() == -1) {
+            source.closeServerThread();
+        }
+        dataBase.deleteUser(token);
     }
     public void runHandler(String data, ServerThread serverThread)  {
         String mainTag = xmlProcessor.getMainTag(data);
@@ -98,6 +102,10 @@ public class Handler {
                     String message = xmlProcessor.getTagContentModified(data, "message");
                     eventUserMessageHandler(data, serverThread);
                     break;
+                case "logout":
+                    logoutHandler(data, serverThread);
+                    break;
+
             }
         }
         catch (Exception ex) {

@@ -21,7 +21,7 @@ public class Client {
         port = 4004;
         socket = new Socket(InetAddress.getByName(null), port);
         user = new User("kto-to");
-        clientHandler = new ClientHandler(user);
+        clientHandler = new ClientHandler(user, this);
         clientReader = new ClientReader(socket, clientHandler);
         clientWriter = new ClientWriter(socket, user);
     }
@@ -35,6 +35,9 @@ public class Client {
     public void sendMessagePerfromed(String messageData) {
         clientWriter.sendMessagePerfomed(messageData);
     }
+    public void closePerfromed() {
+        clientWriter.closePerfomed();
+    }
     public void setUserName(String name) {
         user.setUserName(name);
     }
@@ -42,11 +45,22 @@ public class Client {
         Client client = new Client();
         client.runClient();
     }
-
     public User getUser() {
         return user;
     }
 
+    public void closeClient() {
+        clientReader.closeReader();
+        clientWriter.closeWriter();
+        try {
+            socket.close();
+            System.out.println("soc closed");
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException();
+        }
+    }
     public ClientHandler getClientHandler() {
         return clientHandler;
     }

@@ -16,6 +16,7 @@ public class ClientWriter extends Thread {
     User user;
     String mainCommand = "";
     String mainData = "";
+    volatile boolean isRunning = true;
     public ClientWriter(Socket socket, User user) throws IOException {
         super();
         this.socket = socket;
@@ -23,11 +24,14 @@ public class ClientWriter extends Thread {
         xmlProcessor = new XMLprocessor();
         this.user = user;
     }
+    public void closeWriter() {
+        isRunning = false;
+    }
 
     @Override
     public void run() {
         super.run();
-        while (isAlive()) {
+        while (isRunning) {
             try {
                 if (mainCommand.isEmpty()) {
                     continue;
@@ -69,8 +73,16 @@ public class ClientWriter extends Thread {
                         sendXml = xmlProcessor.fixXML(sendXml);
                         sendXml = xmlProcessor.replacePlaceholder(sendXml, "TOKEN", user.getToken());
                         sendXml = xmlProcessor.replacePlaceholder(sendXml, "MESSAGE", mainData);
-
                         writer.write(sendXml);
+                        writer.flush();
+                        waitCommand();
+                        waitData();
+                        break;
+                    case "/close":
+                        String xmlClose = new String(Files.readAllBytes(Paths.get("client/src/chat_client/xml_client_messages/logout.xml")), StandardCharsets.UTF_8);
+                        xmlClose = xmlProcessor.fixXML(xmlClose);
+                        xmlClose = xmlProcessor.replacePlaceholder(xmlClose, "TOKEN", user.getToken());
+                        writer.write(xmlClose);
                         writer.flush();
                         waitCommand();
                         waitData();
@@ -96,6 +108,10 @@ public class ClientWriter extends Thread {
     public void sendMessagePerfomed(String data) {
         mainCommand = "/send";
         mainData = data;
+    }
+    public void closePerfomed() {
+        mainCommand = "/close";
+        mainData = "";
     }
     public void waitData() {
         mainData = "";

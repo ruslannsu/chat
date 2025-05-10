@@ -13,4 +13,7 @@ public class DataBase {
     public User getUserByToken(String token) {
         return users.get(token);
     }
+    public void deleteUser(String token) {
+        users.remove(token);
+    }
 }

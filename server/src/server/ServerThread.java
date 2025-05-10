@@ -10,6 +10,7 @@ public class ServerThread extends Thread implements Observable {
     BufferedReader reader;
     BufferedWriter writer;
     Observer observer;
+    volatile boolean isRunning = true;
     public ServerThread(Socket socket) throws IOException {
         this.socket = socket;
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -20,10 +21,23 @@ public class ServerThread extends Thread implements Observable {
         writer.write(data);
         writer.flush();
     }
+
+    public BufferedReader getReader() {
+        return reader;
+    }
+    public void closeServerThread() {
+        try {
+            socket.close();
+        }
+        catch (Exception e) {
+            throw new RuntimeException();
+        }
+        isRunning = false;
+    }
     @Override
     public void run() {
         String data;
-        while (isAlive()) {
+        while (isRunning) {
             try {
                 data = reader.readLine();
                 System.out.println(data);

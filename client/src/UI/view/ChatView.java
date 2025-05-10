@@ -1,6 +1,7 @@
 package UI.view;
 
 import UI.controller.listeners.ActionController;
+import UI.controller.listeners.WindowController;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import observer.*;
@@ -34,7 +35,7 @@ public class ChatView extends JFrame implements Observer {
         FlatLaf.updateUI();
         setTitle("Chat");
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
         JPanel contentPane = new JPanel(new BorderLayout());
@@ -94,6 +95,9 @@ public class ChatView extends JFrame implements Observer {
         sendButton.addActionListener(actionController);
         inputField.setName("send");
         actionController.setAscociatedField(inputField);
+    }
+    public void initWindowController(WindowController windowController) {
+        this.addWindowListener(windowController);
     }
 
     @Override

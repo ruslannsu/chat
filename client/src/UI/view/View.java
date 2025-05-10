@@ -1,6 +1,7 @@
 package UI.view;
 
 import UI.controller.listeners.ActionController;
+import UI.controller.listeners.WindowController;
 
 public class View {
     AuthoriszationScreen authoriszationScreen;
@@ -15,6 +16,9 @@ public class View {
     }
     public void initChatScreenListener(ActionController actionController) {
         chatView.initController(actionController);
+    }
+    public void initWindowListener(WindowController windowController) {
+        chatView.initWindowController(windowController);
     }
 
     public ChatView getChatView() {

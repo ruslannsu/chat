@@ -1,6 +1,7 @@
 package UI.controller;
 
 import UI.controller.listeners.ActionController;
+import UI.controller.listeners.WindowController;
 import UI.view.View;
 import chat_client.Client;
 
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 public class Controller {
     Client client;
     ActionController actionController;
+    WindowController windowController;
     View view;
     public Controller(Client client, View view) {
         this.client = client;
@@ -16,6 +18,8 @@ public class Controller {
         this.view = view;
         view.initAuthoriszationScreenListener(actionController);
         view.initChatScreenListener(actionController);
+        windowController = new WindowController(this);
+        view.initWindowListener(windowController);
     }
     public void execute(String input, String textData) {
         switch (input) {
@@ -28,6 +32,10 @@ public class Controller {
             case "send":
                  client.sendMessagePerfromed(textData);
                  break;
+            case "close":
+                client.closePerfromed();
+                break;
+
         }
     }
 

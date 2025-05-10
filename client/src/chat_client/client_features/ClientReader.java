@@ -14,16 +14,21 @@ public class ClientReader extends Thread {
     Socket socket;
     BufferedReader bufferedReader;
     ClientHandler clientHandler;
+    volatile boolean isRunning = true;
     public ClientReader(Socket socket, ClientHandler clientHandler) throws IOException {
         this.socket = socket;
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.clientHandler = clientHandler;
     }
+    public void closeReader() {
+        System.out.println("close reader");
+        isRunning = false;
+    }
 
     @Override
     public void run() {
         super.run();
-        while (isAlive()) {
+        while (isRunning) {
             try {
                 String data;
                 data = bufferedReader.readLine();

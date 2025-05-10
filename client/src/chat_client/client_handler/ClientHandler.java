@@ -1,5 +1,6 @@
 package chat_client.client_handler;
 
+import chat_client.Client;
 import chat_client.User;
 import org.xml.sax.SAXException;
 import processor.XMLprocessor;
@@ -8,12 +9,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import observer.*;
 public class ClientHandler implements Observable {
+    Client client;
     User user;
     Observer observer;
     XMLprocessor xmlProcessor;
-    public ClientHandler(User user) {
+    public ClientHandler(User user, Client client) {
         this.user = user;
         xmlProcessor = new XMLprocessor();
+        this.client = client;
     }
     void loginAccessHandler(String data) throws ParserConfigurationException, IOException, SAXException {
         String token =  xmlProcessor.getTagContent(data, "session");
@@ -29,11 +32,21 @@ public class ClientHandler implements Observable {
         String message = xmlProcessor.getTagContentModified(data, "message");
         observer.update( name + ": " + message, null);
     }
+    void logoutAccessHandler(String data) {
+        client.closeClient();
+        System.out.println(data);
+    }
     public void runHandler(String data) throws ParserConfigurationException, IOException, SAXException {
         String mainTag = xmlProcessor.getMainTag(data);
         switch (mainTag) {
             case "access":
-                loginAccessHandler(data);
+                if (xmlProcessor.getTagContentModified(data, "access").equals("confirmed")) {
+                    System.out.println("wow");
+                    logoutAccessHandler(data);
+                }
+                else {
+                    loginAccessHandler(data);
+                }
                 break;
             case "userlogin":
                 eventAccessHandler(data);
