@@ -15,6 +15,7 @@ public class Controller {
         actionController = new ActionController(this);
         this.view = view;
         view.initAuthoriszationScreenListener(actionController);
+        view.initChatScreenListener(actionController);
     }
     public void execute(String input, String textData) {
         switch (input) {

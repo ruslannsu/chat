@@ -1,5 +1,6 @@
 package UI.view;
 
+import UI.controller.listeners.ActionController;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import observer.*;
@@ -13,7 +14,9 @@ import java.io.IOException;
 public class ChatView extends JFrame implements Observer {
     private static final int WINDOW_WIDTH = 700;
     private static final int WINDOW_HEIGHT = 750;
+    JButton sendButton;
     JPanel messagesPanel;
+    JTextField inputField;
 
     public ChatView() {
         super();
@@ -69,10 +72,12 @@ public class ChatView extends JFrame implements Observer {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         contentPane.add(scrollPane, BorderLayout.CENTER);
         JPanel inputPanel = new JPanel(new BorderLayout(5, 5));
+        inputPanel.setName("send");
         inputPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
-        JTextField inputField = new JTextField();
+        inputField = new JTextField();
         inputPanel.add(inputField, BorderLayout.CENTER);
-        JButton sendButton = new JButton("Send");
+        sendButton = new JButton("Send");
+        sendButton.setActionCommand("send");
         inputPanel.add(sendButton, BorderLayout.EAST);
         contentPane.add(inputPanel, BorderLayout.SOUTH);
         setVisible(false);
@@ -84,6 +89,11 @@ public class ChatView extends JFrame implements Observer {
             ChatView ui = new ChatView();
             ui.setVisible(true);
         });
+    }
+    public void initController(ActionController actionController) {
+        sendButton.addActionListener(actionController);
+        inputField.setName("send");
+        actionController.setAscociatedField(inputField);
     }
 
     @Override

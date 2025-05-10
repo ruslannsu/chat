@@ -13,6 +13,9 @@ public class View {
     public void initAuthoriszationScreenListener(ActionController actionController) {
         authoriszationScreen.initController(actionController);
     }
+    public void initChatScreenListener(ActionController actionController) {
+        chatView.initController(actionController);
+    }
 
     public ChatView getChatView() {
         return chatView;

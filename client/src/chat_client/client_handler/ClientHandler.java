@@ -22,7 +22,7 @@ public class ClientHandler implements Observable {
     }
     void eventAccessHandler(String data) throws IOException {
         System.out.println(xmlProcessor.getTagContentModified(data, "name"));
-        observer.update("Server: user" + xmlProcessor.getTagContentModified(data, "name") + "connected", null);
+        observer.update("Server: user" + " " + xmlProcessor.getTagContentModified(data, "name") + " " + "connected", null);
     }
     public void runHandler(String data) throws ParserConfigurationException, IOException, SAXException {
         String mainTag = xmlProcessor.getMainTag(data);

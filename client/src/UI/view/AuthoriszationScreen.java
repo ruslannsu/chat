@@ -40,6 +40,7 @@ public class AuthoriszationScreen extends JFrame {
         JLabel label = new JLabel("Username:");
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         usernameField = new JTextField();
+        usernameField.setName("registration");
         usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, usernameField.getPreferredSize().height));
         usernameField.setAlignmentX(Component.CENTER_ALIGNMENT);
         joinButton = new JButton("Join");
