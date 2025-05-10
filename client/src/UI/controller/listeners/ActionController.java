@@ -28,10 +28,11 @@ public class ActionController implements ActionListener {
                 controller.execute("registration", ((JTextField)(ascociatedFields.get("registration"))).getText());
                 break;
             case "send":
+
+                controller.execute("send", ((JTextField)(ascociatedFields.get("send"))).getText());
                 SwingUtilities.invokeLater(() -> {
                     ((JTextField)(ascociatedFields.get("send"))).setText("");
                 });
-
                 System.out.println("cleared");
                 break;
         }

@@ -20,11 +20,14 @@ public class Controller {
     public void execute(String input, String textData) {
         switch (input) {
             case "registration":
-                client.registrationPerfromed();
                 client.setUserName(textData);
+                client.registrationPerfromed();
                 view.closeRegistration();
                 view.openChat();
                 break;
+            case "send":
+                 client.sendMessagePerfromed(textData);
+                 break;
         }
     }
 

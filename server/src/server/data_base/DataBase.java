@@ -10,4 +10,7 @@ public class DataBase {
     public void addUser(String token, User user) {
         users.put(token, user);
     }
+    public User getUserByToken(String token) {
+        return users.get(token);
+    }
 }

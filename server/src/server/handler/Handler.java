@@ -67,6 +67,24 @@ public class Handler {
             throw new RuntimeException();
         }
     }
+    void eventUserMessageHandler(String data, ServerThread source) throws IOException {
+        String xmlFile = new String(Files.readAllBytes(Paths.get("server/src/server/xml_server/events/user_message.xml")), StandardCharsets.UTF_8);
+        xmlFile = xmlProcessor.fixXML(xmlFile);
+        String messageInner = xmlProcessor.getTagContentModified(data, "message");
+        String tokenInner = xmlProcessor.getTagContentModified(data, "session");
+        String name = dataBase.getUserByToken(tokenInner).getName();
+        xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "MESSAGE", messageInner);
+        xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "USER_NAME", name);
+        for (ServerThread serverThread : serverThreads) {
+            if (!serverThread.equals(source)) {
+                serverThread.sendMessage(xmlFile);
+            }
+            System.out.println("da");
+        }
+
+
+
+    }
     public void runHandler(String data, ServerThread serverThread)  {
         String mainTag = xmlProcessor.getMainTag(data);
         try {
@@ -75,6 +93,10 @@ public class Handler {
                     String name = xmlProcessor.getTagContent(data, "name");
                     System.out.println(name);
                     loginHandler(name, serverThread);
+                    break;
+                case "message":
+                    String message = xmlProcessor.getTagContentModified(data, "message");
+                    eventUserMessageHandler(data, serverThread);
                     break;
             }
         }

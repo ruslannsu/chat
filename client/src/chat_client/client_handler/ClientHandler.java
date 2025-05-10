@@ -24,6 +24,11 @@ public class ClientHandler implements Observable {
         System.out.println(xmlProcessor.getTagContentModified(data, "name"));
         observer.update("Server: user" + " " + xmlProcessor.getTagContentModified(data, "name") + " " + "connected", null);
     }
+    void eventMessageHandler(String data) throws IOException {
+        String name = xmlProcessor.getTagContentModified(data, "name");
+        String message = xmlProcessor.getTagContentModified(data, "message");
+        observer.update( name + ": " + message, null);
+    }
     public void runHandler(String data) throws ParserConfigurationException, IOException, SAXException {
         String mainTag = xmlProcessor.getMainTag(data);
         switch (mainTag) {
@@ -33,6 +38,10 @@ public class ClientHandler implements Observable {
             case "userlogin":
                 eventAccessHandler(data);
                 break;
+            case "message":
+                eventMessageHandler(data);
+                break;
+
 
 
         }

@@ -7,4 +7,8 @@ public class User {
         this.name = name;
         this.token = token;
     }
+
+    public String getName() {
+        return name;
+    }
 }

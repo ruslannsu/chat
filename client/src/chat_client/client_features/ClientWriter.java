@@ -15,6 +15,7 @@ public class ClientWriter extends Thread {
     XMLprocessor xmlProcessor;
     User user;
     String mainCommand = "";
+    String mainData = "";
     public ClientWriter(Socket socket, User user) throws IOException {
         super();
         this.socket = socket;
@@ -31,6 +32,7 @@ public class ClientWriter extends Thread {
                 if (mainCommand.isEmpty()) {
                     continue;
                 }
+                /*
                 if (mainCommand.equals("/reg")) {
                     String xmlFile = new String(Files.readAllBytes(Paths.get("client/src/chat_client/xml_client_messages/login.xml")), StandardCharsets.UTF_8);
                     xmlFile = xmlFile.replaceAll("[\n\r]", "");
@@ -48,6 +50,37 @@ public class ClientWriter extends Thread {
                     writer.flush();
                 }
 
+                 */
+                switch (mainCommand) {
+                    case "/reg":
+                        String xmlFile = new String(Files.readAllBytes(Paths.get("client/src/chat_client/xml_client_messages/login.xml")), StandardCharsets.UTF_8);
+                        xmlFile = xmlFile.replaceAll("[\n\r]", "");
+                        xmlFile = xmlFile.replaceFirst("\\s", "<<<SPACE>>>");
+                        xmlFile = xmlFile.replaceAll("\\s", "");
+                        xmlFile = xmlFile.replace("<<<SPACE>>>", " ");
+                        xmlFile = xmlFile + '\n';
+                        xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "USER_NAME", user.getUserName());
+                        writer.write(xmlFile);
+                        writer.flush();
+                        waitCommand();
+                        break;
+                    case "/send":
+                        String sendXml = new String(Files.readAllBytes(Paths.get("client/src/chat_client/xml_client_messages/sendmessage.xml")), StandardCharsets.UTF_8);
+                        sendXml = xmlProcessor.fixXML(sendXml);
+                        sendXml = xmlProcessor.replacePlaceholder(sendXml, "TOKEN", user.getToken());
+                        sendXml = xmlProcessor.replacePlaceholder(sendXml, "MESSAGE", mainData);
+
+                        writer.write(sendXml);
+                        writer.flush();
+                        waitCommand();
+                        waitData();
+                        break;
+                    default:
+                        writer.write(mainCommand + '\n');
+                        writer.flush();
+                        break;
+                }
+
             }
             catch (IOException e) {
                 throw new RuntimeException(e);
@@ -59,5 +92,12 @@ public class ClientWriter extends Thread {
     }
     public void waitCommand() {
         mainCommand = "";
+    }
+    public void sendMessagePerfomed(String data) {
+        mainCommand = "/send";
+        mainData = data;
+    }
+    public void waitData() {
+        mainData = "";
     }
 }

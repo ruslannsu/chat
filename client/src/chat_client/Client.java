@@ -32,6 +32,9 @@ public class Client {
     public void registrationPerfromed() {
         clientWriter.loginPerfomed();
     }
+    public void sendMessagePerfromed(String messageData) {
+        clientWriter.sendMessagePerfomed(messageData);
+    }
     public void setUserName(String name) {
         user.setUserName(name);
     }
@@ -39,6 +42,11 @@ public class Client {
         Client client = new Client();
         client.runClient();
     }
+
+    public User getUser() {
+        return user;
+    }
+
     public ClientHandler getClientHandler() {
         return clientHandler;
     }
