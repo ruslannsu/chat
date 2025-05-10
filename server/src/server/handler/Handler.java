@@ -76,7 +76,15 @@ public class Handler {
         xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "MESSAGE", messageInner);
         xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "USER_NAME", name);
         for (ServerThread serverThread : serverThreads) {
-            serverThread.sendMessage(xmlFile);
+            if (serverThread.equals(source)) {
+                xmlFile = xmlProcessor.replacePlaceholder(xmlFile, name, "ВЫ");
+                System.out.println("impos");
+                serverThread.sendMessage(xmlFile);
+                xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "ВЫ", name);
+            }
+            else {
+                serverThread.sendMessage(xmlFile);
+            }
         }
     }
     void logoutHandler(String data, ServerThread source) throws IOException {
