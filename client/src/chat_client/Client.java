@@ -39,5 +39,7 @@ public class Client {
         Client client = new Client();
         client.runClient();
     }
-
+    public ClientHandler getClientHandler() {
+        return clientHandler;
+    }
 }

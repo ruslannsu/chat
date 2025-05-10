@@ -19,9 +19,10 @@ public class Controller {
     public void execute(String input, String textData) {
         switch (input) {
             case "registration":
-                System.out.println("!!!!!!!!--0");
                 client.registrationPerfromed();
-                client.setUserName(textData);;
+                client.setUserName(textData);
+                view.closeRegistration();
+                view.openChat();
                 break;
         }
     }
