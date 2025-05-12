@@ -1,0 +1,3 @@
+<command name="logout">
+    <session>TOKEN</session>
+</command>

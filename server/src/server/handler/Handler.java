@@ -78,7 +78,6 @@ public class Handler {
         for (ServerThread serverThread : serverThreads) {
             if (serverThread.equals(source)) {
                 xmlFile = xmlProcessor.replacePlaceholder(xmlFile, name, "ВЫ");
-                System.out.println("impos");
                 serverThread.sendMessage(xmlFile);
                 xmlFile = xmlProcessor.replacePlaceholder(xmlFile, "ВЫ", name);
             }

@@ -1,0 +1,4 @@
+<command name="message">
+    <message>MESSAGE</message>
+    <session>TOKEN</session>
+</command>

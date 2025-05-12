@@ -1,0 +1,4 @@
+<event name="message">
+    <name>USER_NAME</name>
+    <message>MESSAGE</message>
+</event>
