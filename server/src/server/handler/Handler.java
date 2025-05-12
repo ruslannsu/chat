@@ -95,6 +95,15 @@ public class Handler {
         if (source.getReader().read() == -1) {
             source.closeServerThread();
         }
+        for (ServerThread serverThread : serverThreads) {
+            if (!serverThread.equals(source)){
+              String logoutMessage = new String(Files.readAllBytes(Paths.get("server/src/server/xml_server/events/user_message.xml")), StandardCharsets.UTF_8);
+              logoutMessage = xmlProcessor.fixXML(logoutMessage);
+              logoutMessage = xmlProcessor.replacePlaceholder(logoutMessage, "USER_NAME", dataBase.getUserByToken(token).getName());
+              logoutMessage = xmlProcessor.replacePlaceholder(logoutMessage, "MESSAGE", "disconnected");
+              serverThread.sendMessage(logoutMessage);
+            }
+        }
         dataBase.deleteUser(token);
     }
     public void runHandler(String data, ServerThread serverThread)  {
